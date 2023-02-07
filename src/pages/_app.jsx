@@ -1,6 +1,4 @@
 import "tailwindcss/tailwind.css";
-import "@fontsource/poppins/latin.css";
-import "@fontsource/sora/latin.css";
 import "@fontsource/inter/latin.css";
 
 import { Web3ReactProvider } from "@web3-react/core";
