@@ -1,16 +1,22 @@
 {
     "editor.formatOnSave": true,
+    "standard.autoFixOnSave": true,
     "[javascriptreact]": {
         "editor.formatOnSave": true,
+        "editor.defaultFormatter": "standard.vscode-standard",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll": true
         }
     },
     "[javascript]": {
         "editor.formatOnSave": true,
+        "editor.defaultFormatter": "standard.vscode-standard",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll": true
         }
+    },
+    "[yaml]": {
+        "editor.formatOnSave": false
     },
     "files.associations": {
         "*.css": "postcss"
@@ -23,6 +29,9 @@
     },
     "editor.tabSize": 2,
     "javascript.preferences.importModuleSpecifier": "non-relative",
-    "color-highlight.markerType": "dot-before",
-    "color-highlight.markRuler": false,
+    "cSpell.words": [
+        "arbitrum",
+        "nosniff",
+        "okxwallet"
+    ]
 }

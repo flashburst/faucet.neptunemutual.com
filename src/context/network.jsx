@@ -1,28 +1,28 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react'
 
-const initialValue = "80001";
+const initialValue = ''
 
 const NetworkContext = createContext({
   network: initialValue,
-  setNetwork: (_value) => {},
-});
+  setNetwork: (_value) => {}
+})
 
 export const useNetwork = () => {
-  const context = useContext(NetworkContext);
+  const context = useContext(NetworkContext)
 
   if (!context) {
-    console.error("Use Context inside the Provider");
+    console.error('Use Context inside the Provider')
   }
 
-  return context;
-};
+  return context
+}
 
 export const NetworkProvider = ({ children }) => {
-  const [network, setNetwork] = useState(initialValue);
+  const [network, setNetwork] = useState(initialValue)
 
   return (
     <NetworkContext.Provider value={{ network, setNetwork }}>
       {children}
     </NetworkContext.Provider>
-  );
-};
+  )
+}

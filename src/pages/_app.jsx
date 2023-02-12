@@ -1,19 +1,22 @@
-import "tailwindcss/tailwind.css";
-import "@fontsource/inter/latin.css";
+import 'tailwindcss/tailwind.css'
+import '@fontsource/inter/latin.css'
 
-import { Web3ReactProvider } from "@web3-react/core";
+import { ConnectWalletProvider } from '@/lib/connect-wallet/context'
+import { getLibrary } from '@/lib/connect-wallet/utils/web3'
+import { Web3ReactProvider } from '@web3-react/core'
 
-import { getLibrary } from "@/lib/connect-wallet/utils/web3";
-import { NetworkProvider } from "../context/network";
+import { NetworkProvider } from '../context/network'
 
-function MyApp({ Component, pageProps }) {
+function MyApp ({ Component, pageProps }) {
   return (
     <NetworkProvider>
       <Web3ReactProvider getLibrary={getLibrary}>
-        <Component {...pageProps} />
+        <ConnectWalletProvider>
+          <Component {...pageProps} />
+        </ConnectWalletProvider>
       </Web3ReactProvider>
     </NetworkProvider>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

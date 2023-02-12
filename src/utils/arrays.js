@@ -5,5 +5,5 @@ export const chunk = (size, arr = []) => {
         ? [...segments, arr.slice(index, index + size)]
         : segments,
     []
-  );
-};
+  )
+}

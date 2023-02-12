@@ -1,45 +1,64 @@
-import { useEffect } from "react";
-import { ConnectorNames } from "../config/connectors";
-import { ACTIVE_CONNECTOR_KEY } from "../config/localstorage";
-import useAuth from "./useAuth";
+import {
+  useEffect,
+  useState
+} from 'react'
+
+import { walletTrackerLS } from '@/lib/connect-wallet/utils/local-storage'
+
+import { ConnectorNames } from '../config/connectors'
+import useAuth from './useAuth'
 
 const _binanceChainListener = async () =>
   new Promise((resolve) =>
-    Object.defineProperty(window, "BinanceChain", {
-      get() {
-        return this.bsc;
+    Object.defineProperty(window, 'BinanceChain', {
+      get () {
+        return this.bsc
       },
-      set(bsc) {
-        this.bsc = bsc;
+      set (bsc) {
+        this.bsc = bsc
 
-        resolve();
-      },
+        resolve()
+      }
     })
-  );
+  )
 
-export const useEagerConnect = (networkId, notifier) => {
-  const { login } = useAuth(networkId, notifier);
+export const useEagerConnect = (networkId) => {
+  // Makes sure that this hook only runs once
+  const [tried, setTried] = useState(false)
+  const { login } = useAuth()
 
   useEffect(() => {
-    const connectorName = window.localStorage.getItem(ACTIVE_CONNECTOR_KEY);
+    if (tried || !networkId) {
+      return
+    }
+
+    setTried(true)
+
+    const connectorName = walletTrackerLS.getConnector()
 
     if (!connectorName) {
-      console.info("Unable to find connector from local storage");
-      return;
+      console.info('Unable to find connector from local storage')
+      return
     }
 
     if (connectorName === ConnectorNames.BSC) {
-      // window.BinanceChain might not be imediately available on page load
-      const isConnectorBinanceChain = connectorName === ConnectorNames.BSC;
-      const isBinanceChainDefined = Reflect.has(window, "BinanceChain");
+      // window.BinanceChain might not be immediately available on page load
+      const isConnectorBinanceChain = connectorName === ConnectorNames.BSC
+      const isBinanceChainDefined = Reflect.has(window, 'BinanceChain')
 
       if (isConnectorBinanceChain && !isBinanceChainDefined) {
-        _binanceChainListener().then(() => login(connectorName));
+        _binanceChainListener()
+          .then(() => login(networkId, connectorName))
+          .catch(() => console.log('Could not auto connect'))
 
-        return;
+        return
       }
     }
 
-    login(connectorName);
-  }, [login]);
-};
+    // added a slight delay in executing activate fx in connecting the wallet to prevent stale error issue
+    setTimeout(() => {
+      login(networkId, connectorName)
+        .catch(() => console.log('Could not auto connect'))
+    }, 500)
+  }, [login, networkId, tried])
+}
