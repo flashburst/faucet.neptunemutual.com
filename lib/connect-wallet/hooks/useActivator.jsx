@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 
-import { NetworkNames } from '@/lib/connect-wallet/config/chains'
-import { walletTrackerLS } from '@/lib/connect-wallet/utils/local-storage'
 import {
   UnsupportedChainIdError,
   useWeb3React
 } from '@web3-react/core'
 
+import { NetworkNames } from '../config/chains'
 import { WalletNames } from '../config/connectors'
 import { getConnectorByName } from '../utils/connectors'
 import { CustomException } from '../utils/CustomException'
+import { walletTrackerLS } from '../utils/local-storage'
 
 export function useActivator () {
   const { activate } = useWeb3React()

@@ -3,9 +3,8 @@ import {
   useState
 } from 'react'
 
-import { walletTrackerLS } from '@/lib/connect-wallet/utils/local-storage'
-
 import { ConnectorNames } from '../config/connectors'
+import { walletTrackerLS } from '../utils/local-storage'
 import useAuth from './useAuth'
 
 const _binanceChainListener = async () =>

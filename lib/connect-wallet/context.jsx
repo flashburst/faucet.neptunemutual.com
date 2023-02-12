@@ -6,13 +6,14 @@ import {
   useState
 } from 'react'
 
-import { Popup } from '@/lib/connect-wallet/components/ConnectWallet/Popup'
-import useAuth from '@/lib/connect-wallet/hooks/useAuth'
-import { useEagerConnect } from '@/lib/connect-wallet/hooks/useEagerConnect'
-import { getProviderOrSigner } from '@/lib/connect-wallet/utils/web3'
 import { useNetwork } from '@/src/context/network'
 import { AddressZero } from '@ethersproject/constants'
 import { useWeb3React } from '@web3-react/core'
+
+import { Popup } from './components/ConnectWallet/Popup'
+import useAuth from './hooks/useAuth'
+import { useEagerConnect } from './hooks/useEagerConnect'
+import { getProviderOrSigner } from './utils/web3'
 
 const Context = createContext({
   isActive: false,

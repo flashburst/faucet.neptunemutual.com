@@ -3,8 +3,9 @@ import {
   useEffect
 } from 'react'
 
-import { walletTrackerLS } from '@/lib/connect-wallet/utils/local-storage'
 import { useWeb3React } from '@web3-react/core'
+
+import { walletTrackerLS } from '../utils/local-storage'
 
 export function useDeactivator () {
   const { deactivate, connector } = useWeb3React()

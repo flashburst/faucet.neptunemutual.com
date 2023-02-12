@@ -3,10 +3,10 @@ import {
   useState
 } from 'react'
 
-import { useConnectWallet } from '@/lib/connect-wallet/context'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { wallets } from '../../config/wallets'
+import { useConnectWallet } from '../../context'
 import { Disclaimer } from '../ConnectWallet/Disclaimer'
 import { WalletList } from '../ConnectWallet/WalletList'
 import CloseIcon from '../icons/CloseIcon'

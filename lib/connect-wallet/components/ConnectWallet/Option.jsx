@@ -1,5 +1,5 @@
-import { ConnectorNames } from '@/lib/connect-wallet/config/connectors'
-import { isMobile } from '@/lib/connect-wallet/utils/userAgent'
+import { ConnectorNames } from '../../config/connectors'
+import { isMobile } from '../../utils/userAgent'
 
 export const Option = (props) => {
   const { id, name, Icon, onClick, connectorName, getAvailability } = props
