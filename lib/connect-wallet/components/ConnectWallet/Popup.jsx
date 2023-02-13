@@ -1,52 +1,67 @@
-import { useEffect, useState } from "react";
-import { Dialog } from "@headlessui/react";
-import { useWeb3React } from "@web3-react/core";
+import {
+  useEffect,
+  useState
+} from 'react'
 
-import useAuth from "../../hooks/useAuth";
-import { wallets } from "../../config/wallets";
-import { Modal } from "../Modal/Modal";
-import { Disclaimer } from "../ConnectWallet/Disclaimer";
-import { WalletList } from "../ConnectWallet/WalletList";
-import { Loader } from "../Loader/Loader";
-import CloseIcon from "../icons/CloseIcon";
+import * as Dialog from '@radix-ui/react-dialog'
 
-export const Popup = ({ isOpen, onClose, networkId, notifier }) => {
-  const [isConnecting, setIsConnecting] = useState(false);
-  const { active } = useWeb3React();
+import { wallets } from '../../config/wallets'
+import { useConnectWallet } from '../../context'
+import { Disclaimer } from '../ConnectWallet/Disclaimer'
+import { WalletList } from '../ConnectWallet/WalletList'
+import CloseIcon from '../icons/CloseIcon'
+import { Loader } from '../Loader/Loader'
+import { Modal } from './Modal'
 
-  const { login } = useAuth(networkId, notifier);
+export const Popup = ({ isOpen, onClose, networkId }) => {
+  const [isConnecting, setIsConnecting] = useState(false)
+  const { isActive, login } = useConnectWallet()
 
   useEffect(() => {
-    if (!isOpen) setIsConnecting(false);
-
-    if (active) {
-      setIsConnecting(false);
-      onClose();
+    if (!isOpen) {
+      setIsConnecting(false)
     }
-  }, [isOpen, active, onClose]);
 
-  const onConnect = (id) => {
-    setIsConnecting(true);
-    const wallet = wallets.find((x) => x.id === id);
-    const connectorName = wallet.connectorName;
-    login(connectorName);
-  };
+    if (isActive) {
+      setIsConnecting(false)
+      onClose()
+    }
+  }, [isOpen, isActive, onClose])
+
+  const onConnect = async (id) => {
+    const wallet = wallets.find((x) => x.id === id)
+    const connectorName = wallet.connectorName
+
+    try {
+      setIsConnecting(true)
+      await login(networkId, connectorName)
+      setIsConnecting(false)
+    } catch (error) {
+      setIsConnecting(false)
+      onClose()
+      alert(error.message)
+    }
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="relative inline-block max-w-md p-8 my-8 text-left align-middle transition-all min-w-sm sm:p-12 rounded-3xl bg-f1f3f6">
-        <Dialog.Title
-          as="h3"
-          className="font-bold leading-9 text-black font-sora text-h2"
-        >
-          Connect Wallet
+      <div className={[
+        'w-full relative border-[1.5px] border-B0C4DB flex flex-col p-5 text-left align-middle rounded-3xl max-h-full m-auto overflow-auto',
+        'sm:p-12 xs:p-8',
+        'max-w-md transition-all bg-white'
+      ].join(' ')}
+      >
+        <Dialog.Title className='font-bold leading-9 text-black font-sora text-h2'>
+          Connect wallet
         </Dialog.Title>
 
         <button
+          type='button'
           onClick={onClose}
-          className="absolute flex items-center justify-center text-black rounded-md top-7 right-12 hover:text-4e7dd9 focus:text-4e7dd9 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-transparent"
+          className='absolute flex items-center justify-center text-black rounded-md top-5 md:top-7 right-8 md:right-12 hover:text-4e7dd9 focus:text-4e7dd9 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-transparent'
+          title='Close'
         >
-          <span className="sr-only">Close</span>
+          <span className='sr-only'>Close</span>
           <CloseIcon width={24} height={24} />
         </button>
 
@@ -59,13 +74,13 @@ export const Popup = ({ isOpen, onClose, networkId, notifier }) => {
 
         {isConnecting && (
           <>
-            <div className="flex items-center mt-8 justify-left">
+            <div className='flex items-center mt-8 justify-left'>
               <Loader />
-              <p className="">Connecting</p>
+              <p className=''>Connecting</p>
             </div>
           </>
         )}
       </div>
     </Modal>
-  );
-};
+  )
+}

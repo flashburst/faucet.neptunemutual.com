@@ -1,126 +1,89 @@
-import { useEffect } from "react";
-import { useNetwork } from "../context/network";
+import { useEffect } from 'react'
 
-const Network_IDs = ["3", "42", "80001", "43113"];
+import { useNetwork } from '../context/network'
+
+const NETWORK_IDS = ['80001', '43113']
+
 export const SelectNetwork = () => {
-  const { network, setNetwork } = useNetwork();
+  const { network, setNetwork } = useNetwork()
 
   const handleChange = (ev) => {
-    setNetwork(ev.target.value);
-  };
+    setNetwork(ev.target.value)
+  }
 
   useEffect(() => {
-    async function getSelectedNetwork() {
+    async function getSelectedNetwork () {
       try {
+        if (!window.ethereum) {
+          return
+        }
+
         const selectedNetwork = await window.ethereum.request({
-          method: "net_version",
-        });
-        if (Network_IDs.includes(selectedNetwork)) setNetwork(selectedNetwork);
+          method: 'net_version'
+        })
+        if (!NETWORK_IDS.includes(selectedNetwork)) {
+          return
+        }
+
+        return selectedNetwork
       } catch (e) {
-        console.error({ e });
+        console.error({ e })
       }
     }
 
-    getSelectedNetwork();
-  }, []);
+    getSelectedNetwork().then((n) => {
+      if (!n) {
+        return
+      }
+      setNetwork(n)
+    })
+  }, [setNetwork])
 
   return (
     <>
       <form onSubmit={(ev) => ev.preventDefault()}>
-        <h3 className="text-xs font-inter font-bold py-3.5 text-gray-800">
+        <h3 className='text-xs font-inter font-bold py-3.5 text-gray-800'>
           Select a Network
         </h3>
-        <div className="flex items-center justify-between sm:justify-start sm:space-x-5">
-          {/* <div className="flex items-center justify-center">
+        <div className='flex items-center justify-between sm:justify-start sm:space-x-5'>
+          <div className='flex items-center justify-center'>
             <input
-              type="radio"
-              className="w-4 h-4 accent-36309D"
-              id="networkChoice3"
-              name="network"
-              value="3"
+              type='radio'
+              className='w-4 h-4 accent-36309D'
+              id='networkChoice2'
+              name='network'
+              value='80001'
               onChange={handleChange}
-              checked={"3" === network}
+              checked={network === '80001'}
             />
             <label
-              htmlFor="networkChoice3"
-              className="ml-1 text-sm text-gray-800 font-inter"
-            >
-              Ropsten
-            </label>
-          </div>
-          <div className="flex items-center justify-center">
-            <input
-              type="radio"
-              className="w-4 h-4 accent-36309D"
-              id="networkChoice4"
-              name="network"
-              disabled={true}
-              value="42"
-              onChange={handleChange}
-              checked={"42" === network}
-            />
-            <label
-              htmlFor="networkChoice4"
-              className="ml-1 text-sm text-gray-800 font-inter"
-            >
-              Kovan
-            </label>
-          </div> */}
-
-          {/* <div className="flex items-center justify-center">
-            <input
-              type="radio"
-              className="w-4 h-4 accent-36309D"
-              id="networkChoice1"
-              name="network"
-              value="97"
-              onChange={handleChange}
-              checked={"97" === network}
-            />
-            <label
-              htmlFor="networkChoice1"
-              className="ml-1 text-sm text-gray-800 font-inter"
-            >
-              BSC Testnet
-            </label>
-          </div> */}
-
-          <div className="flex items-center justify-center">
-            <input
-              type="radio"
-              className="w-4 h-4 accent-36309D"
-              id="networkChoice2"
-              name="network"
-              value="80001"
-              onChange={handleChange}
-              checked={"80001" === network}
-            />
-            <label
-              htmlFor="networkChoice2"
-              className="ml-1 text-sm text-gray-800 font-inter"
+              htmlFor='networkChoice2'
+              className='ml-1 text-sm text-gray-800 font-inter'
             >
               Mumbai
             </label>
           </div>
-          <div className="flex items-center justify-center">
+          <div className='flex items-center justify-center'>
             <input
-              type="radio"
-              className="w-4 h-4 accent-36309D"
-              id="networkChoice2"
-              name="network"
-              value="43113"
+              type='radio'
+              className='w-4 h-4 accent-36309D'
+              id='networkChoice2'
+              name='network'
+              value='43113'
               onChange={handleChange}
-              checked={"43113" === network}
+              checked={network === '43113'}
             />
             <label
-              htmlFor="networkChoice2"
-              className="ml-1 text-sm text-gray-800 font-inter"
+              htmlFor='networkChoice2'
+              className='ml-1 text-sm text-gray-800 font-inter'
             >
               Fuji
             </label>
           </div>
         </div>
       </form>
+
+      {network === '80001' && <p><strong>We no longer support Mumbai</strong></p>}
     </>
-  );
-};
+  )
+}

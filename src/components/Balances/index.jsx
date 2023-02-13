@@ -1,80 +1,85 @@
-import { MintableToken } from "@/components/Balances/MintableToken";
-import { useNetwork } from "@/src/context/network";
-import { useWeb3React } from "@web3-react/core";
-import { config, multicall } from "@neptunemutual/sdk";
-const { Contract, Provider } = multicall;
-import { chunk } from "@/src/utils/arrays";
-import { useEffect, useState } from "react";
-import { getProviderOrSigner } from "@/lib/connect-wallet/utils/web3";
+import {
+  useEffect,
+  useState
+} from 'react'
+
+import { MintableToken } from '@/components/Balances/MintableToken'
+import { useConnectWallet } from '@/lib/connect-wallet/context'
+import { useNetwork } from '@/src/context/network'
+import { chunk } from '@/src/utils/arrays'
+import {
+  config,
+  multicall
+} from '@neptunemutual/sdk'
+import { useWeb3React } from '@web3-react/core'
+
+const { Contract, Provider } = multicall
 
 export const getTokenSymbolAndDecimals = async (
   addresses,
   signerOrProvider
 ) => {
-  const multiCallProvider = new Provider(signerOrProvider.provider);
+  const multiCallProvider = new Provider(signerOrProvider.provider)
 
-  await multiCallProvider.init(); // Only required when `chainId` is not provided in the `Provider` constructor
+  await multiCallProvider.init() // Only required when `chainId` is not provided in the `Provider` constructor
 
-  const calls = [];
+  const calls = []
   for (let i = 0; i < addresses.length; i++) {
-    const address = addresses[i];
+    const address = addresses[i]
 
-    const instance = new Contract(address, config.abis.IERC20Detailed);
+    const instance = new Contract(address, config.abis.IERC20Detailed)
 
-    calls.push(instance.symbol(), instance.decimals());
+    calls.push(instance.symbol(), instance.decimals())
   }
 
-  const result = await multiCallProvider.all(calls);
+  const result = await multiCallProvider.all(calls)
 
-  return chunk(2, result);
-};
+  return chunk(2, result)
+}
 
 export const Balances = ({ addresses }) => {
-  const { account, library } = useWeb3React();
-  const { network } = useNetwork();
+  const { account } = useWeb3React()
+  const { signerOrProvider } = useConnectWallet()
+  const { network } = useNetwork()
   const [tokenData, setTokenData] = useState({
-    npmSymbol: "NPM",
+    npmSymbol: 'NPM',
     npmDecimals: 18,
-    stablecoinSymbol: "DAI",
-    stablecoinDecimals: 6,
-  });
+    stablecoinSymbol: 'DAI',
+    stablecoinDecimals: 6
+  })
 
   useEffect(() => {
-    if (!network || !account || !addresses.NPMToken || !addresses.Stablecoin) {
-      return;
+    if (!network || !account || !addresses.NPMToken || !addresses.Stablecoin || !signerOrProvider) {
+      return
     }
-
-    const signerOrProvider = getProviderOrSigner(
-      library,
-      account,
-      parseInt(network, 10)
-    );
 
     getTokenSymbolAndDecimals(
       [addresses.NPMToken, addresses.Stablecoin],
       signerOrProvider
-    ).then(([npmData, stablecoinData]) => {
-      setTokenData({
-        npmSymbol: npmData[0],
-        npmDecimals: npmData[1],
-        stablecoinSymbol: stablecoinData[0],
-        stablecoinDecimals: stablecoinData[1],
-      });
-    });
-  }, [account, addresses, library, network]);
+    )
+      .then(([npmData, stablecoinData]) => {
+        setTokenData({
+          npmSymbol: npmData[0],
+          npmDecimals: npmData[1],
+          stablecoinSymbol: stablecoinData[0],
+          stablecoinDecimals: stablecoinData[1]
+        })
+      })
+      .catch(console.log)
+  }, [account, addresses, network, signerOrProvider])
 
   if (!account || !network) {
-    return null;
+    return null
   }
 
   return (
-    <div className="mt-2">
-      <h3 className="text-xs font-bold text-gray-800 font-inter">
+    <div className='mt-2'>
+      <h3 className='text-xs font-bold text-gray-800 font-inter'>
         Your Balances
       </h3>
-      <table className="w-full mt-2 table-auto">
-        <thead></thead>
-        <tbody className="divide-y divide-gray-200">
+      <table className='w-full mt-2 table-auto'>
+        <thead />
+        <tbody className='divide-y divide-gray-200'>
           <MintableToken
             address={addresses.Stablecoin}
             symbol={tokenData.stablecoinSymbol}
@@ -88,5 +93,5 @@ export const Balances = ({ addresses }) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
