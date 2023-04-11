@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useNetwork } from '../context/network'
 
-const NETWORK_IDS = ['80001', '43113']
+const NETWORK_IDS = ['80001', '43113', '84531']
 
 export const SelectNetwork = () => {
   const { network, setNetwork } = useNetwork()
@@ -78,6 +78,23 @@ export const SelectNetwork = () => {
               className='ml-1 text-sm text-gray-800 font-inter'
             >
               Fuji
+            </label>
+          </div>
+          <div className='flex items-center justify-center'>
+            <input
+              type='radio'
+              className='w-4 h-4 accent-36309D'
+              id='networkChoice3'
+              name='network'
+              value='84531'
+              onChange={handleChange}
+              checked={network === '84531'}
+            />
+            <label
+              htmlFor='networkChoice3'
+              className='ml-1 text-sm text-gray-800 font-inter'
+            >
+              Coinbase
             </label>
           </div>
         </div>
