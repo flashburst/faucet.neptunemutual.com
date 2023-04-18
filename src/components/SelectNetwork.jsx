@@ -94,7 +94,7 @@ export const SelectNetwork = () => {
               htmlFor='networkChoice3'
               className='ml-1 text-sm text-gray-800 font-inter'
             >
-              Coinbase
+              Base Goerli
             </label>
           </div>
         </div>
