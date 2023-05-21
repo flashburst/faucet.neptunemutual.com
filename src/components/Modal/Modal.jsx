@@ -1,11 +1,15 @@
-import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+
+import {
+  Dialog,
+  Transition
+} from '@headlessui/react'
 
 export const Modal = ({ isOpen = false, children, onClose }) => (
   <Transition appear show={isOpen} as={Fragment}>
     <Dialog
       as='div'
-      className='font-poppins fixed inset-0 z-10 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm'
+      className='fixed inset-0 z-10 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm'
       onClose={onClose}
     >
       <div className='min-h-screen px-4 text-center'>

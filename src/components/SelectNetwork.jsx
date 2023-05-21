@@ -45,7 +45,7 @@ export const SelectNetwork = () => {
   return (
     <>
       <form onSubmit={(ev) => ev.preventDefault()}>
-        <h3 className='text-xs font-inter font-bold py-3.5 text-gray-800'>
+        <h3 className='text-xs  font-bold py-3.5 text-gray-800'>
           Select a Network
         </h3>
         <div className='flex items-center justify-between sm:justify-start sm:space-x-5'>
@@ -55,7 +55,7 @@ export const SelectNetwork = () => {
                 <div className='flex items-center justify-center' key={idx}>
                   <input
                     type='radio'
-                    className='w-4 h-4 accent-36309D'
+                    className='w-4 h-4 accent-indigo-800'
                     id={`choice-${idx}`}
                     name='network'
                     value={x.networkId}
@@ -64,7 +64,7 @@ export const SelectNetwork = () => {
                   />
                   <label
                     htmlFor={`choice-${idx}`}
-                    className='ml-1 text-sm text-gray-800 font-inter'
+                    className='ml-1 text-sm text-gray-800 '
                   >
                     {x.name}
                   </label>

@@ -51,7 +51,7 @@ export const Popup = ({ isOpen, onClose, networkId }) => {
         'max-w-md transition-all bg-white'
       ].join(' ')}
       >
-        <Dialog.Title className='font-bold leading-9 text-black font-sora text-h2'>
+        <Dialog.Title className='font-bold leading-9 text-black text-h2'>
           Connect wallet
         </Dialog.Title>
 
@@ -76,7 +76,7 @@ export const Popup = ({ isOpen, onClose, networkId }) => {
           <>
             <div className='flex items-center mt-8 justify-left'>
               <Loader />
-              <p className=''>Connecting</p>
+              <p>Connecting...</p>
             </div>
           </>
         )}
