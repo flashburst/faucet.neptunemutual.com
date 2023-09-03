@@ -1,4 +1,9 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, {
+  Head,
+  Html,
+  Main,
+  NextScript
+} from 'next/document'
 
 class MyDocument extends Document {
   render () {
@@ -82,7 +87,7 @@ class MyDocument extends Document {
           />
           <meta name='theme-color' content='#01052D' />
         </Head>
-        <body className='font-inter'>
+        <body className='flex flex-col justify-center min-h-screen bg-indigo-800 font-inter'>
           <Main />
           <NextScript />
         </body>

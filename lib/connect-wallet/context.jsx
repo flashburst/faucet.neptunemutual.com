@@ -34,20 +34,20 @@ export function useConnectWallet () {
 }
 
 export function ConnectWalletProvider ({ children }) {
-  const { active, chainId, account, library } = useWeb3React()
+  const { active, chainId: connectedChainId, account, library } = useWeb3React()
   const { login, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
 
   const { network } = useNetwork()
-  const networkId = parseInt(network, 10)
+  const selectedChainId = parseInt(network, 10)
 
-  useEagerConnect(networkId)
+  useEagerConnect(selectedChainId)
 
   useEffect(() => {
-    if (active && chainId !== networkId) {
+    if (active && connectedChainId !== selectedChainId) {
       logout()
     }
-  }, [active, chainId, logout, networkId])
+  }, [active, connectedChainId, logout, selectedChainId])
 
   function onClose () {
     setIsOpen(false)
@@ -56,12 +56,12 @@ export function ConnectWalletProvider ({ children }) {
   const signerOrProvider = useMemo(() => {
     let signerOrProvider = null
 
-    if (networkId) {
-      signerOrProvider = getProviderOrSigner(library, account || AddressZero, networkId)
+    if (account && connectedChainId && connectedChainId === selectedChainId) {
+      signerOrProvider = getProviderOrSigner(library, account || AddressZero, selectedChainId)
     }
 
     return signerOrProvider
-  }, [account, library, networkId])
+  }, [account, connectedChainId, library, selectedChainId])
 
   const value = useMemo(() => ({
     isActive: active,
@@ -82,7 +82,7 @@ export function ConnectWalletProvider ({ children }) {
       {children}
 
       <Popup
-        networkId={networkId}
+        networkId={selectedChainId}
         isOpen={isOpen}
         onClose={onClose}
       />

@@ -17,12 +17,12 @@ export const useProtocolContracts = () => {
   const { signerOrProvider } = useConnectWallet()
 
   useEffect(() => {
+    if (!network || !account || !signerOrProvider) {
+      return
+    }
+
     const getAddresses = async () => {
       const chain = parseInt(network, 10)
-
-      if (!network || !account || !signerOrProvider) {
-        return
-      }
 
       const metadataKeys = getMetadataKeys()
       const metadataResult = await utils.store.readStorage(
@@ -37,7 +37,8 @@ export const useProtocolContracts = () => {
       })
     }
 
-    getAddresses().catch(() => {
+    getAddresses().catch((error) => {
+      console.error(error)
       window.alert('Could not get addresses')
     })
   }, [account, network, signerOrProvider])

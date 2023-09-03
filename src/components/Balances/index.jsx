@@ -74,7 +74,7 @@ export const Balances = ({ addresses }) => {
 
   return (
     <div className='mt-2'>
-      <h3 className='text-xs font-bold text-gray-800 font-inter'>
+      <h3 className='text-xs font-bold text-gray-800 '>
         Your Balances
       </h3>
       <table className='w-full mt-2 table-auto'>
